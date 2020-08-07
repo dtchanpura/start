@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   setTime()
   setDate()
   setStyle()
-  setInterval(setTime, 1000)
+  setInterval(setTime, 15000)
 
   const button = document.querySelector('.content-input > button')
 
@@ -11,28 +11,30 @@ document.addEventListener('DOMContentLoaded', function (event) {
     if (e.keyCode === 13) search()
   })
 
-  function setTime () {
+  function setTime() {
     const now = new Date()
-    const utcTime = now.toISOString().replace('T', ' ').replace('.', ' ').substr(11, 9) + ' UTC'
+    const utcTime = now.toISOString().replace('T', ' ').replace('.', ' ').substr(11, 5) + ' UTC'
 
-    document.getElementById('current-time').innerHTML = now.toLocaleTimeString()
+    document.getElementById('current-time').innerHTML = now.toTimeString().substr(0, 5)
     document.getElementById('utc-time').innerHTML = utcTime
   }
 
-  function setDate () {
+  function setDate() {
     const now = new Date()
     document.getElementById('date').innerHTML = now.toDateString().substr(4)
   }
 
-  function search () {
+  function search() {
     const str = document.getElementById('search').value
-
-    const output = 'https://duckduckgo.com/?q=' + str
-
-    location.href = output
+    if (str.substr(0, 8) == "https://") {
+      location.href = str
+    } else {
+      const output = 'https://duckduckgo.com/?q=' + str
+      location.href = output
+    }
   }
 
-  function setStyle () {
+  function setStyle() {
     const now = new Date()
     const h = now.getHours()
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
