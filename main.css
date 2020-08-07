@@ -130,3 +130,9 @@ button {
 .links ul li a:hover {
     color: var(--hover);
 }
+
+.links, .recent-links {
+    font-family: "Fira Code", monospace;
+    width: var(--pagewidth);
+    max-width: var(--maxwidth);
+}

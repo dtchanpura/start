@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   setTime()
   setDate()
   setStyle()
+  setRecentLinks()
   setInterval(setTime, 15000)
 
   const button = document.querySelector('.content-input > button')
@@ -24,13 +25,65 @@ document.addEventListener('DOMContentLoaded', function (event) {
     document.getElementById('date').innerHTML = now.toDateString().substr(4)
   }
 
+  function addLink(link) {
+    let links = JSON.parse(window.localStorage.getItem('links'))
+    if (links === null) {
+      links = {};
+    }
+    if (link in links) {
+      links[link]++
+    } else {
+      links[link] = 1
+    }
+    links = sortLinks(links)
+    window.localStorage.setItem('links', JSON.stringify(links))
+  }
+
+  function removeLink(link) {
+    let links = JSON.parse(window.localStorage.getItem('links'))
+    if (links === null) {
+      links = {}
+    }
+    if (link in links) {
+      delete(links[link])
+    }
+    window.localStorage.setItem('links', JSON.stringify(links))
+  }
+
+  function sortLinks(links) {
+    let r = {}
+    Object.entries(links).sort((x, y)  => x[1] < y[1]).forEach(element => {
+      r[element[0]] = element[1];
+    })
+    return r
+  }
+
   function search() {
     const str = document.getElementById('search').value
     if (str.substr(0, 8) == "https://") {
+      addLink(str)
       location.href = str
     } else {
       const output = 'https://duckduckgo.com/?q=' + str
       location.href = output
+    }
+  }
+
+  function setRecentLinks() {
+    const recents = document.querySelector('.recents')
+    const links = JSON.parse(window.localStorage.getItem('links'))
+    if (links !== null) {
+      const title = document.createElement('li')
+      title.innerHTML = 'recents'
+      recents.appendChild(title)
+
+      Object.keys(links).forEach((link) => {
+        const a = document.createElement('a')
+        a.href = a.innerHTML = link
+        const li = document.createElement('li')
+        li.appendChild(a)
+        recents.appendChild(li)
+      });
     }
   }
 
