@@ -26,18 +26,24 @@ document.addEventListener('DOMContentLoaded', function (event) {
   }
 
   function createLinkEntry(link, count) {
-    const a = document.createElement('a')
-    a.onclick = function () { addLink(link) }
-    a.href = a.innerHTML = link + " (" + count + ")";
     const d = document.createElement('span')
+    const a = document.createElement('a')
+    const c = document.createElement('span')
+    const li = document.createElement('li')
     d.classList.add("delete")
-    d.onclick = function () { removeLink(link) }
     d.innerHTML = "- "
     d.title = "remove"
-    const li = document.createElement('li')
+    d.onclick = function () { removeLink(link) }
+
+    a.onclick = function () { addLink(link) }
+    a.href = a.innerHTML = link
+
+    c.innerHTML =  " (" + count + ")";
+
     li.id = link.replace("https://", "")
     li.appendChild(d)
     li.appendChild(a)
+    li.appendChild(c)
     return li
   }
 
