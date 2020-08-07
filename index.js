@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   function setRecentLinks() {
     const recents = document.querySelector('.recents')
     const links = JSON.parse(window.localStorage.getItem('links'))
-    if (links !== null && links.length > 0) {
+    if (links !== null && Object.keys(links).length > 0) {
       const title = document.createElement('li')
       title.innerHTML = 'recents'
       recents.appendChild(title)
