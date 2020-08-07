@@ -131,8 +131,9 @@ button {
     color: var(--hover);
 }
 
-.links, .recent-links {
+.links + .recent-links {
     font-family: "Fira Code", monospace;
     width: var(--pagewidth);
     max-width: var(--maxwidth);
+    display: inline-block;
 }
