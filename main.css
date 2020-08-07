@@ -137,3 +137,7 @@ button {
     max-width: var(--maxwidth);
     display: inline-block;
 }
+
+.links span.delete {
+    cursor: pointer;
+}

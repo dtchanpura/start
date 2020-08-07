@@ -25,6 +25,22 @@ document.addEventListener('DOMContentLoaded', function (event) {
     document.getElementById('date').innerHTML = now.toDateString().substr(4)
   }
 
+  function createLinkEntry(link, count) {
+    const a = document.createElement('a')
+    a.onclick = function () { addLink(link) }
+    a.href = a.innerHTML = link + " (" + count + ")";
+    const d = document.createElement('span')
+    d.classList.add("delete")
+    d.onclick = function () { removeLink(link) }
+    d.innerHTML = "- "
+    d.title = "remove"
+    const li = document.createElement('li')
+    li.id = link.replace("https://", "")
+    li.appendChild(d)
+    li.appendChild(a)
+    return li
+  }
+
   function addLink(link) {
     let links = JSON.parse(window.localStorage.getItem('links'))
     if (links === null) {
@@ -37,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
     }
     links = sortLinks(links)
     window.localStorage.setItem('links', JSON.stringify(links))
+    location.href = link
   }
 
   function removeLink(link) {
@@ -45,14 +62,21 @@ document.addEventListener('DOMContentLoaded', function (event) {
       links = {}
     }
     if (link in links) {
-      delete(links[link])
+      delete (links[link])
     }
     window.localStorage.setItem('links', JSON.stringify(links))
+    const recents = document.querySelector('.recents')
+
+    for (let i = recents.children.length - 1; i > 0; i--) {
+      if (recents.children[i].id == link.replace("https://", "")) {
+        recents.children[i].remove()
+      }
+    }
   }
 
   function sortLinks(links) {
     let r = {}
-    Object.entries(links).sort((x, y)  => x[1] < y[1]).forEach(element => {
+    Object.entries(links).sort((x, y) => x[1] < y[1]).forEach(element => {
       r[element[0]] = element[1];
     })
     return r
@@ -62,7 +86,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
     const str = document.getElementById('search').value
     if (str.substr(0, 8) == "https://") {
       addLink(str)
-      location.href = str
     } else {
       const output = 'https://duckduckgo.com/?q=' + str
       location.href = output
@@ -72,17 +95,12 @@ document.addEventListener('DOMContentLoaded', function (event) {
   function setRecentLinks() {
     const recents = document.querySelector('.recents')
     const links = JSON.parse(window.localStorage.getItem('links'))
-    if (links !== null) {
+    if (links !== null && links.length > 0) {
       const title = document.createElement('li')
       title.innerHTML = 'recents'
       recents.appendChild(title)
-
-      Object.keys(links).forEach((link) => {
-        const a = document.createElement('a')
-        a.href = a.innerHTML = link
-        const li = document.createElement('li')
-        li.appendChild(a)
-        recents.appendChild(li)
+      Object.keys(links).slice(0, 10).forEach((link) => {
+        recents.appendChild(createLinkEntry(link, links[link]))
       });
     }
   }
