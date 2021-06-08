@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
     let period
 
-    if (h >= 5 && h < 12) period = 1
+    if (h >= 4 && h < 12) period = 1
     else if (h >= 12 && h < 18) period = 2
     else if (h >= 18) period = 3
     else period = 0
@@ -162,3 +162,9 @@ document.addEventListener('DOMContentLoaded', function (event) {
     }
   }
 })
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js');
+  });
+}
